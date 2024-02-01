@@ -1,0 +1,75 @@
+{
+  "id": "tt1",
+  "name":"Test1测试1",
+  "config": [
+    {
+      "id": "name",
+      "name": "测试名称",
+      "type": "string",
+      "data": "hello!",
+      "annotation": "markdown support"
+    },
+    {
+      "id": "number1",
+      "name": "测试数字",
+      "type": "number",
+      "data": 114514,
+      "annotation": "### markdown support"
+    },
+    {
+      "id": "number2",
+      "name": "测试小数",
+      "data": 11451.4,
+      "type": "decimals",
+      "annotation": "#### markdown support"
+    },
+    {
+      "id": "array1",
+      "name": "测试数组 字符串",
+      "data": ["hello","world"],
+      "type": "stringarray",
+      "annotation": "markdown **support**"
+    },
+    {
+      "id": "array2",
+      "name": "测试数组 数字",
+      "data": [1,114],
+      "type": "numberarray",
+      "annotation": "## markdown support"
+    },
+    {
+      "id": "bool1",
+      "name": "测试布尔值",
+      "data": false,
+      "type": "bool",
+      "annotation": "bool"
+    },
+    {
+      "id": "array3",
+      "name": "测试数组 小数",
+      "data": [114.255,514.255],
+      "type": "decimalsarray",
+      "annotation": "# markdown support"
+    },{
+      "id": "obj1",
+      "name": "测试对象类型",
+      "data": {
+        "hello": "hello",
+        "number": 114514,
+        "array": [111,2222,3333],
+        "obj": [{
+          "hello":"hello",
+          "test": "test"
+        }]
+      },
+      "object_annotation": {
+        "hello": "hello",
+        "number": "# 114514",
+        "array": "[111,2222,3333]",
+        "obj": "hello"
+      },
+      "type": "object",
+      "annotation": "Hello Object!"
+    }
+  ]
+}
