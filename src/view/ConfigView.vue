@@ -30,67 +30,76 @@
 </template>
 
 <script setup>
-import {  ref ,onBeforeUnmount} from 'vue'
-import {useRouter} from "vue-router";
-import {getMetaData} from "../api/api.js";
-import ConfigEditor from "../components/ConfigEditor.vue";
+// 1. 导入必要的库和组件
+import { ref, onBeforeUnmount } from 'vue' // 导入Vue的响应式引用和生命周期钩子
+import { useRouter } from "vue-router" // 导入Vue路由
+import { getMetaData } from "../api/api.js" // 导入API方法
+import ConfigEditor from "../components/ConfigEditor.vue" // 导入子组件
+import { useMessage } from 'naive-ui' // 导入UI库的消息功能
 
-import { useMessage } from 'naive-ui'
-const message = useMessage()
+// 2. 初始化组件状态
+const router = useRouter(); // 使用路由
+const message = useMessage() // 初始化消息功能
+const id = ref('') // 存储当前路由的id参数
+const metaData = ref(null) // 存储从API获取的元数据
+const show = ref(false) // 控制设置元素的显示
 
-const router = useRouter();
-const id = ref('')
-const metaData = ref(null)
-
-const show = ref(false)
-
+// 从路由获取id并打印
 id.value = router.currentRoute.value.params.id
+console.log(id.value)
 
-console.log(router.currentRoute.value.params.id)
-
-const loadData = ()=>{
-  getMetaData(id.value).then((res)=>{
+// 3. 定义组件逻辑
+// 加载数据的方法
+const loadData = () => {
+  getMetaData(id.value).then((res) => {
     metaData.value = res.data;
-    setTimeout(()=>{
+    setTimeout(() => {
       show.value = true
-    },200)
+    }, 200)
   })
 }
 
+// 调用加载数据方法
 loadData()
-const removeRouterHook = router.afterEach((to,from)=>{
-  if(to.path.indexOf('/config')<0){
+
+// 设置路由守卫，当路由变化时重新加载数据
+const removeRouterHook = router.afterEach((to, from) => {
+  if (to.path.indexOf('/config') < 0) {
     return
   }
-  id.value = router.currentRoute.value.params.id
+  id.value = to.params.id
   loadData()
 })
 
-onBeforeUnmount(()=>{
+// 组件卸载前移除路由守卫
+onBeforeUnmount(() => {
   removeRouterHook();
 });
 
-const beforeEnter = (dom) =>{
+// 4. 动画相关方法
+// 动画开始前
+const beforeEnter = (dom) => {
   dom.classList.add('fade-list-enter-active');
 }
-const enter = (dom, done) =>{
-  let delay = dom.dataset.delay;
-  delay = Number(delay);
+// 动画执行中
+const enter = (dom, done) => {
+  let delay = Number(dom.dataset.delay);
   setTimeout(() => {
     dom.classList.remove('fade-list-enter-active');
     dom.classList.add('fade-list-enter-to');
     let transitionend = window.ontransitionend ? "transitionend" : "webkitTransitionEnd";
-    dom.addEventListener(transitionend, function onEnd () {
+    dom.addEventListener(transitionend, function onEnd() {
       dom.removeEventListener(transitionend, onEnd);
-      done(); //调用done() 告诉vue动画已完成，以触发 afterEnter 钩子
+      done(); // 动画完成后调用done()
     })
-
   }, delay);
 }
-const afterEnter = (dom) =>{
+// 动画完成后
+const afterEnter = (dom) => {
   dom.classList.remove('fade-list-enter-to');
 }
 </script>
+
 
 <style scoped>
 .config-view{
